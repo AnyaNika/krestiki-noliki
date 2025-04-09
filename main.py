@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import messagebox
-import time
 
 window = tk.Tk()
 window.title("Крестики-нолики")
-window.geometry('300x350')
+window.geometry('300x250')
 current_player = "X"
 buttons = []
+window.config(background='LightBlue')
 
 
 def check_winner():
@@ -25,7 +25,7 @@ def check_winner():
 
 def highlight_winner(winning_coords):
     for (i,j) in winning_coords:
-        buttons[i][j].config(bg='LightGreen')
+        buttons[i][j].config(fg='Red')
 
 
 def on_click(row, col):
@@ -40,9 +40,8 @@ def on_click(row, col):
     if winning_coords:
         highlight_winner(winning_coords)
         window.update_idletasks()
-        time.sleep(0.5)
         messagebox.showinfo("Игра окончена", f"Игрок {current_player} победил!")
-        window.after(1000, reset_game)
+        reset_game()
     else:
         current_player = "0" if current_player == "X" else "X"
 
@@ -52,7 +51,7 @@ def reset_game():
     for i in range(3):
         for j in range(3):
             buttons[i][j]['text'] = ''
-            buttons[i][j].config(bg='LightCoral')
+            buttons[i][j].config(fg='Black')
 
 
 for i in range(3):
