@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+import time
 
 window = tk.Tk()
 window.title("Крестики-нолики")
@@ -11,15 +12,20 @@ buttons = []
 def check_winner():
     for i in range(3):
         if buttons[i][0]['text'] == buttons[i][1]['text'] == buttons[i][2]['text'] !="":
-            return True
+            return [(i, 0), (i, 1), (i, 2)]
         if buttons[0][i]['text'] == buttons[1][i]['text'] == buttons[2][i]['text'] !="":
-            return True
+            return [(0, i), (1, i), (2, i)]
 
     if buttons[0][0]['text'] == buttons[1][1]['text'] == buttons[2][2]['text'] !="":
-        return True
+        return [(0, 0), (1, 1), (2, 2)]
     if buttons[0][2]['text'] == buttons[1][1]['text'] == buttons[2][0]['text'] !="":
-        return True
-    return False
+        return [(0, 2), (1, 1), (2, 0)]
+    return None
+
+
+def highlight_winner(winning_coords):
+    for (i,j) in winning_coords:
+        buttons[i][j].config(bg='LightGreen')
 
 
 def on_click(row, col):
@@ -30,9 +36,13 @@ def on_click(row, col):
 
     buttons[row][col]['text'] = current_player
 
-    if check_winner():
+    winning_coords = check_winner()
+    if winning_coords:
+        highlight_winner(winning_coords)
+        window.update_idletasks()
+        time.sleep(0.5)
         messagebox.showinfo("Игра окончена", f"Игрок {current_player} победил!")
-        reset_game()
+        window.after(1000, reset_game)
     else:
         current_player = "0" if current_player == "X" else "X"
 
@@ -42,6 +52,8 @@ def reset_game():
     for i in range(3):
         for j in range(3):
             buttons[i][j]['text'] = ''
+            buttons[i][j].config(bg='LightCoral')
+
 
 for i in range(3):
     row = []
